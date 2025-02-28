@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wsdtabse/services/DBProvider.dart';
 import 'package:wsdtabse/services/dbhelper.dart';
+import 'package:wsdtabse/services/theme_provider.dart';
 class AddPage extends StatefulWidget {
   int id;
   bool isUpdate;
@@ -30,11 +31,20 @@ class _AddPageState extends State<AddPage> {
       descController.text = widget.desc;
     }
     return Scaffold(
-      appBar: AppBar(title: Text(widget.isUpdate? "Update Note" : "Add Note"),),
+      appBar: AppBar(title: Text(widget.isUpdate? "Update Note" : "Add Note"),
+        actions: [
+        SizedBox(width: 160,
+          child: Consumer<ThemeProvider>(builder: (ctx, provider, __){
+            return SwitchListTile(value: provider.getThemeValue(),
+                onChanged: (newvalue){
+              provider.UpdateThemeMode(value: newvalue);
+            });
+          }),
+        )
+        ],),
       body:
 
       Container(
-      color: Colors.pink.shade50,
       child: Padding(
         padding: const EdgeInsets.all(11.0),
         child: Column(

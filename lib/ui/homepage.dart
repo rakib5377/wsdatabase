@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wsdtabse/services/DBProvider.dart';
 import 'package:wsdtabse/services/dbhelper.dart';
 import 'package:wsdtabse/ui/addpage.dart';
+import 'package:wsdtabse/ui/settings.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,7 +33,21 @@ class _HomePageState extends State<HomePage> {
   }*/
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text("Notes"),),
+    return Scaffold(appBar: AppBar(title: Text("Notes"),
+    actions: [PopupMenuButton(itemBuilder: (context){
+      return [
+        PopupMenuItem(child: Row(
+          children: [
+            Icon(Icons.settings),
+            SizedBox(width: 11,),
+            Text("Settings"),
+          ],
+        ),onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> Settings()));
+        },)
+      ];
+    })],
+    ),
     body: Consumer<DBProvider>(
         builder: (ctx, provider, __){
           List<Map<String, dynamic>> allNotes = ctx.read<DBProvider>().getNotes();
@@ -61,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                         descController.text = allNotes[index][DBhelper.table_note_desc];
                     return getBottomSheetWidget(isUpdate: true, id: allNotes[index][DBhelper.table_note_sno]);
                   });*/
-                      },child: Icon(Icons.edit,color: Colors.pink,),),
+                      },child: Icon(Icons.edit),),
                       InkWell(onTap:()async{
                         context.read<DBProvider>().deleteData(allNotes[index][DBhelper.table_note_sno]);
                         /*bool check = await dbRef!.deleteNote(id: allNotes[index][DBhelper.table_note_sno]);
@@ -69,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                           refresh();
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Deleted Successfully")));
                         }*/
-                      },child: Icon(Icons.delete,color: Colors.red,),)
+                      },child: Icon(Icons.delete),)
                     ],
                   ),
                   ),
